@@ -6,7 +6,7 @@ import 'nprogress/nprogress.css'; // Requires adding nprogress to package.json
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.2 });
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://codecrafter-3-o.onrender.com/api',
   timeout: 12000,
 });
 
