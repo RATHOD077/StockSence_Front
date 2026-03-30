@@ -39,49 +39,52 @@ const CSS = `
   /* Hero */
   .hm-hero { position: relative; padding: 8rem 1.25rem 6rem; text-align: center; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
   .hm-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 10%, rgba(59,158,255,.12) 0%, transparent 70%); pointer-events: none; }
-  .hm-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 20%, transparent 80%); opacity: .4; }
+  .hm-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 3.75rem 3.75rem; mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 20%, transparent 80%); opacity: .4; }
   
-  .hm-eyebrow { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--blue); margin-bottom: 2rem; display: inline-flex; align-items: center; gap: .5rem; background: var(--blue-glow); padding: .4rem 1.25rem; border-radius: 99px; border: 1px solid var(--blue-border); position: relative; z-index: 1;}
-  .hm-title { font-family: 'DM Serif Display', serif; font-size: clamp(3rem, 8vw, 5.5rem); line-height: 1.05; letter-spacing: -.03em; margin: 0 0 1.5rem; position: relative; z-index: 1;}
+  .hm-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 2rem; display: inline-flex; align-items: center; gap: 0.5rem; background: var(--blue-glow); padding: 0.4rem 1.25rem; border-radius: 6.1875rem; border: 1px solid var(--blue-border); position: relative; z-index: 1;}
+  .hm-title { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 8vw, 5.5rem); line-height: 1.05; letter-spacing: -.03em; margin: 0 0 1.5rem; position: relative; z-index: 1;}
   .hm-title em { font-style: italic; color: var(--blue); }
-  .hm-subtitle { color: var(--muted2); font-size: 1.15rem; max-width: 650px; margin: 0 auto 3rem; line-height: 1.6; position: relative; z-index: 1; }
+  .hm-subtitle { color: var(--muted2); font-size: clamp(0.95rem, 3vw, 1.15rem); max-width: 40.625rem; margin: 0 auto 3rem; line-height: 1.6; position: relative; z-index: 1; padding: 0 1rem; }
 
-  .hm-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: 1.1rem 2.25rem; background: var(--blue); color: #fff; border: none; border-radius: 99px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all .2s; font-family: 'Instrument Sans', sans-serif; box-shadow: 0 8px 32px rgba(59,158,255,.3); position: relative; z-index: 1;}
-  .hm-btn:hover { background: #1a7ee0; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(59,158,255,.4); }
+  .hm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1.1rem 2.25rem; background: var(--blue); color: #fff; border: none; border-radius: 6.1875rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all .2s; font-family: 'Instrument Sans', sans-serif; box-shadow: 0 0.5rem 2rem rgba(59,158,255,.3); position: relative; z-index: 1;}
+  .hm-btn:hover { background: #1a7ee0; transform: translateY(-0.125rem); box-shadow: 0 0.75rem 2.5rem rgba(59,158,255,.4); }
 
   /* Bento Grid */
-  .hm-bento { max-width: 1200px; margin: 0 auto; padding: 5rem 1.25rem; }
+  .hm-bento { max-width: 75rem; margin: 0 auto; padding: 5rem 1.25rem; }
   .hm-section-title { text-align: center; margin-bottom: 4rem; }
-  .hm-section-title h2 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; margin: 0; }
-  .hm-section-title p { font-family: 'DM Mono', monospace; color: var(--blue); font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; margin-bottom: .5rem; }
+  .hm-section-title h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.75rem, 5vw, 2.5rem); margin: 0; }
+  .hm-section-title p { font-family: 'DM Mono', monospace; color: var(--blue); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
   
   .hm-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
   .hm-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1.5rem; padding: 2.25rem; position: relative; overflow: hidden; transition: all .3s; display: flex; flex-direction: column; justify-content: space-between; }
-  .hm-card:hover { border-color: var(--blue-border); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+  .hm-card:hover { border-color: var(--blue-border); transform: translateY(-0.25rem); box-shadow: 0 1.25rem 2.5rem rgba(0,0,0,.4); }
   .hm-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, var(--blue-glow), transparent 60%); opacity: 0; transition: opacity .3s; }
   .hm-card:hover::before { opacity: 1; }
 
-  .hm-card-icon { width: 56px; height: 56px; border-radius: 1.125rem; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--blue); margin-bottom: 2rem; transition: transform .3s, background .3s; position: relative; z-index: 1;}
+  .hm-card-icon { width: 3.5rem; height: 3.5rem; border-radius: 1.125rem; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--blue); margin-bottom: 2rem; transition: transform .3s, background .3s; position: relative; z-index: 1;}
   .hm-card:hover .hm-card-icon { background: var(--blue); color: #fff; transform: scale(1.05); }
 
-  .hm-card h3 { font-size: 1.35rem; font-weight: 600; margin: 0 0 .75rem; color: var(--text); position: relative; z-index: 1; }
-  .hm-card p { color: var(--muted2); font-size: .95rem; line-height: 1.6; margin: 0; position: relative; z-index: 1; }
+  .hm-card h3 { font-size: clamp(1.1rem, 3vw, 1.35rem); font-weight: 600; margin: 0 0 0.75rem; color: var(--text); position: relative; z-index: 1; }
+  .hm-card p { color: var(--muted2); font-size: 0.95rem; line-height: 1.6; margin: 0; position: relative; z-index: 1; }
 
   /* Spans */
   .hm-span-8 { grid-column: span 8; }
   .hm-span-4 { grid-column: span 4; }
   .hm-span-6 { grid-column: span 6; }
 
-  @media (max-width: 900px) {
+  @media (max-width: 56.25rem) {
     .hm-span-8, .hm-span-4, .hm-span-6 { grid-column: span 12; }
+    .hm-hero { padding: 6rem 1rem 4rem; }
+    .hm-bento { padding: 3rem 1rem; }
+    .hm-card { padding: 1.5rem; }
   }
 
   /* Footer */
   .hm-footer { text-align: center; padding: 4rem 1.25rem; border-top: 1px solid var(--border); background: var(--surface); }
-  .hm-footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: .5rem; }
-  .hm-footer-text { color: var(--muted); font-size: .85rem; }
+  .hm-footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .hm-footer-text { color: var(--muted); font-size: 0.85rem; }
 
-  @keyframes hmFadeUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes hmFadeUp { from { opacity: 0; transform: translateY(1.25rem) } to { opacity: 1; transform: translateY(0) } }
   .hm-fade { animation: hmFadeUp .6s ease both; }
 `;
 

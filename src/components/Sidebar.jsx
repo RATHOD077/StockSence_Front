@@ -1,9 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, TrendingUp, Briefcase, Newspaper,
-  LogOut, Activity, Bitcoin, Search, Lightbulb, Target, Shield, Sparkles, BookOpen
+  LogOut, Activity, Bitcoin, Search, Lightbulb, Target, Shield, Sparkles, BookOpen, Menu, X
 } from 'lucide-react';
 
 const navItems = [
@@ -30,13 +30,24 @@ const CSS = `
   .sb-root {
     position: fixed;
     left: 0; top: 0; bottom: 0;
-    width: 240px;
+    width: var(--sidebar-width, 15rem);
     background: #0a0e14;
     border-right: 1px solid rgba(255,255,255,.06);
     display: flex;
     flex-direction: column;
     z-index: 100;
     font-family: 'Instrument Sans', sans-serif;
+    transition: transform 0.3s ease;
+  }
+
+  /* Mobile closed state */
+  @media (max-width: 48rem) {
+    .sb-root {
+      transform: translateX(-100%);
+    }
+    .sb-root.open {
+      transform: translateX(0);
+    }
   }
 
   /* Logo area */
@@ -45,15 +56,15 @@ const CSS = `
     border-bottom: 1px solid rgba(255,255,255,.06);
     display: flex;
     align-items: center;
-    gap: .75rem;
+    gap: 0.75rem;
     flex-shrink: 0;
   }
   .sb-logo-icon {
-    width: 38px; height: 38px;
-    border-radius: .75rem;
+    width: 2.375rem; height: 2.375rem;
+    border-radius: 0.75rem;
     background: linear-gradient(135deg, #3b9eff 0%, #1a7ee0 100%);
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(59,158,255,.35);
+    box-shadow: 0 0.25rem 1rem rgba(59,158,255,.35);
     flex-shrink: 0;
   }
   .sb-logo-name {
@@ -64,46 +75,62 @@ const CSS = `
   }
   .sb-logo-tagline {
     font-family: 'DM Mono', monospace;
-    font-size: .6rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: .12em;
+    letter-spacing: 0.12em;
     color: #3b9eff;
-    margin-top: .25rem;
+    margin-top: 0.25rem;
+  }
+  .sb-close-btn {
+    display: none;
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #8a9ab0;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+  }
+  .sb-close-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  @media (max-width: 48rem) {
+    .sb-close-btn {
+      display: block;
+    }
   }
 
   /* Nav */
   .sb-nav {
     flex: 1;
-    padding: 1rem .75rem;
+    padding: 1rem 0.75rem;
     overflow-y: auto;
   }
-  .sb-nav::-webkit-scrollbar { width: 3px; }
+  .sb-nav::-webkit-scrollbar { width: 0.1875rem; }
   .sb-nav::-webkit-scrollbar-track { background: transparent; }
-  .sb-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 99px; }
+  .sb-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 6.1875rem; }
 
   .sb-nav-label {
     font-family: 'DM Mono', monospace;
-    font-size: .58rem;
+    font-size: 0.58rem;
     text-transform: uppercase;
-    letter-spacing: .15em;
+    letter-spacing: 0.15em;
     color: #5a6878;
-    padding: 0 .75rem .625rem;
+    padding: 0 0.75rem 0.625rem;
     display: block;
   }
 
   .sb-link {
     display: flex;
     align-items: center;
-    gap: .65rem;
-    padding: .625rem .875rem;
-    border-radius: .75rem;
-    margin-bottom: .2rem;
+    gap: 0.65rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.2rem;
     text-decoration: none;
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: #8a9ab0;
     border: 1px solid transparent;
-    transition: all .18s ease;
+    transition: all 0.18s ease;
     position: relative;
     overflow: hidden;
   }
@@ -122,13 +149,13 @@ const CSS = `
     content: '';
     position: absolute;
     left: 0; top: 20%; bottom: 20%;
-    width: 2px;
-    border-radius: 0 2px 2px 0;
+    width: 0.125rem;
+    border-radius: 0 0.125rem 0.125rem 0;
     background: #3b9eff;
-    box-shadow: 0 0 8px rgba(59,158,255,.6);
+    box-shadow: 0 0 0.5rem rgba(59,158,255,.6);
   }
   .sb-link-icon {
-    width: 18px; height: 18px;
+    width: 1.125rem; height: 1.125rem;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     opacity: .7;
@@ -139,36 +166,36 @@ const CSS = `
 
   /* User block */
   .sb-user {
-    padding: 1rem .75rem;
+    padding: 1rem 0.75rem;
     border-top: 1px solid rgba(255,255,255,.06);
     flex-shrink: 0;
   }
   .sb-user-card {
     background: #141b22;
     border: 1px solid rgba(255,255,255,.06);
-    border-radius: .875rem;
-    padding: .75rem .875rem;
+    border-radius: 0.875rem;
+    padding: 0.75rem 0.875rem;
     display: flex;
     align-items: center;
-    gap: .75rem;
-    margin-bottom: .75rem;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
     transition: border-color .2s;
   }
   .sb-user-card:hover { border-color: rgba(59,158,255,.18); }
   .sb-avatar {
-    width: 34px; height: 34px;
+    width: 2.125rem; height: 2.125rem;
     border-radius: 50%;
     background: linear-gradient(135deg, #3b9eff 0%, #1a7ee0 100%);
     display: flex; align-items: center; justify-content: center;
     font-family: 'DM Mono', monospace;
-    font-size: .85rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #fff;
     flex-shrink: 0;
-    box-shadow: 0 2px 10px rgba(59,158,255,.3);
+    box-shadow: 0 0.125rem 0.625rem rgba(59,158,255,.3);
   }
   .sb-user-name {
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: #e8edf2;
     white-space: nowrap;
@@ -178,13 +205,13 @@ const CSS = `
   .sb-user-role {
     display: flex;
     align-items: center;
-    gap: .3rem;
+    gap: 0.3rem;
     font-family: 'DM Mono', monospace;
-    font-size: .6rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
     color: #3b9eff;
-    margin-top: .15rem;
+    margin-top: 0.15rem;
   }
 
   .sb-logout {
@@ -192,13 +219,13 @@ const CSS = `
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: .5rem;
-    padding: .6rem;
-    border-radius: .75rem;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 0.75rem;
     border: 1px solid rgba(255,255,255,.06);
     background: transparent;
     color: #5a6878;
-    font-size: .82rem;
+    font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
     font-family: 'Instrument Sans', sans-serif;
@@ -214,12 +241,55 @@ const CSS = `
   .sb-divider {
     height: 1px;
     background: rgba(255,255,255,.04);
-    margin: .5rem .75rem;
+    margin: 0.5rem 0.75rem;
   }
 
   /* Active glow effect in bg */
-  @keyframes sbFadeIn { from { opacity: 0; transform: translateX(-8px) } to { opacity: 1; transform: translateX(0) } }
+  @keyframes sbFadeIn { from { opacity: 0; transform: translateX(-0.5rem) } to { opacity: 1; transform: translateX(0) } }
   .sb-link { animation: sbFadeIn .3s ease both; }
+
+  /* Mobile overlay styling */
+  .sb-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(0.125rem);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .sb-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sb-mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 80;
+    background: #141b22;
+    border: 1px solid rgba(255,255,255,.06);
+    color: #e8edf2;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 0.25rem 1rem rgba(0,0,0,.3);
+    transition: all 0.2sease;
+  }
+  .sb-mobile-toggle:hover {
+    background: #1c2630;
+    border-color: rgba(59,158,255,.2);
+  }
+  @media (max-width: 48rem) {
+    .sb-mobile-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 `;
 
 function injectSbStyles() {
@@ -231,66 +301,82 @@ function injectSbStyles() {
 }
 
 export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => { injectSbStyles(); }, []);
 
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => { logout(); navigate('/login'); };
+  
+  const toggleSidebar = () => setIsOpen(!isOpen);
+  const closeSidebar = () => setIsOpen(false);
 
   return (
-    <aside className="sb-root">
-      {/* Logo */}
-      <div className="sb-logo">
-        <div className="sb-logo-icon">
-          <Activity size={20} color="#fff" />
+    <>
+      <button className="sb-mobile-toggle" onClick={toggleSidebar}>
+        <Menu size={20} />
+      </button>
+
+      <div className={`sb-overlay ${isOpen ? 'open' : ''}`} onClick={closeSidebar}></div>
+
+      <aside className={`sb-root ${isOpen ? 'open' : ''}`}>
+        {/* Logo */}
+        <div className="sb-logo">
+          <div className="sb-logo-icon">
+            <Activity size={20} color="#fff" />
+          </div>
+          <div>
+            <div className="sb-logo-name">StockSense</div>
+            <div className="sb-logo-tagline">Smart Finance</div>
+          </div>
+          <button className="sb-close-btn" onClick={closeSidebar}>
+            <X size={20} />
+          </button>
         </div>
-        <div>
-          <div className="sb-logo-name">StockSense</div>
-          <div className="sb-logo-tagline">Smart Finance</div>
-        </div>
-      </div>
 
-      {/* Nav */}
-      <nav className="sb-nav">
-        <span className="sb-nav-label">Navigation</span>
+        {/* Nav */}
+        <nav className="sb-nav">
+          <span className="sb-nav-label">Navigation</span>
 
-        {navItems.map(({ to, icon: Icon, label }, i) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) => `sb-link${isActive ? ' active' : ''}`}
-            style={{ animationDelay: `${i * 0.04}s` }}
-          >
-            <span className="sb-link-icon">
-              <Icon size={16} />
-            </span>
-            {label}
-          </NavLink>
-        ))}
-      </nav>
+          {navItems.map(({ to, icon: Icon, label }, i) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={closeSidebar}
+              className={({ isActive }) => `sb-link${isActive ? ' active' : ''}`}
+              style={{ animationDelay: `${i * 0.04}s` }}
+            >
+              <span className="sb-link-icon">
+                <Icon size={16} />
+              </span>
+              {label}
+            </NavLink>
+          ))}
+        </nav>
 
-      {/* User + Logout */}
-      <div className="sb-user">
-        {user && (
-          <div className="sb-user-card">
-            <div className="sb-avatar">
-              {user.name ? user.name[0].toUpperCase() : 'U'}
-            </div>
-            <div style={{ overflow: 'hidden', flex: 1, minWidth: 0 }}>
-              <div className="sb-user-name">{user.name}</div>
-              <div className="sb-user-role">
-                <Shield size={9} />
-                {user.role}
+        {/* User + Logout */}
+        <div className="sb-user">
+          {user && (
+            <div className="sb-user-card">
+              <div className="sb-avatar">
+                {user.name ? user.name[0].toUpperCase() : 'U'}
+              </div>
+              <div style={{ overflow: 'hidden', flex: 1, minWidth: 0 }}>
+                <div className="sb-user-name">{user.name}</div>
+                <div className="sb-user-role">
+                  <Shield size={9} />
+                  {user.role}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        <button onClick={handleLogout} className="sb-logout">
-          <LogOut size={14} />
-          Logout
-        </button>
-      </div>
-    </aside>
+          )}
+          <button onClick={handleLogout} className="sb-logout">
+            <LogOut size={14} />
+            Logout
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
